@@ -8,15 +8,17 @@ This is a bare bones, experimental repo to upload straight to Nomic Atlas from R
 devtools::install_github("nomic-ai/Ratlas")
 ```
 
-### Get an API Key from `atlas.nomic.ai`
+### Set up credentials
 
-Add your key directorly to `~/.Renviron`
+Get an API Key from `atlas.nomic.ai` on your organization page.
+
+Either: add your key directly to `~/.Renviron` ...
 
 ```
 ATLAS_API_KEY=nk-12345ABCDER
 ```
 
-Create a temporary environment variable
+... or create a temporary environment variable
 ```R
 Sys.setenv(ATLAS_API_KEY="nk-1234556")
 ```
@@ -43,4 +45,4 @@ create_dataset(dataset_name, public=FALSE, viewer = viewer) |>
   build_map(indexed_field = indexed_field, colnames = colnames(tibble), viewer=viewer)
 ```
 
-Go to atlas.nomic.ai and visit your organization.
+Go to atlas.nomic.ai -- you should see the dataset building.
