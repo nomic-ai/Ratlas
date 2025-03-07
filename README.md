@@ -23,8 +23,8 @@ Sys.setenv(ATLAS_API_KEY="nk-1234556")
 
 ### Upload data
 
-Right now, this package doesn't support incremental data updates because we are making that
-flow much more powerful; it will soon.
+Right now, this package doesn't support incremental data updates because we are in the process of removing
+the unique id constraint from atlas. TBD.
 
 ```R
 library(Ratlas)
