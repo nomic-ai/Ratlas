@@ -2,7 +2,13 @@
 
 This is a bare bones, experimental repo to upload straight to Nomic Atlas from R.
 
-## Get an API Key from `atlas.nomic.ai` and upload.
+### Install
+
+```R
+devtools::install_github("nomic-ai/Ratlas")
+```
+
+### Get an API Key from `atlas.nomic.ai`
 
 Add your key directorly to `~/.Renviron`
 
@@ -15,7 +21,7 @@ Create a temporary environment variable
 Sys.setenv(ATLAS_API_KEY="nk-1234556")
 ```
 
-Then upload data.
+### Upload data
 
 Right now, this package doesn't support incremental data updates because we are making that
 flow much more powerful; it will soon.
