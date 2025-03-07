@@ -34,8 +34,13 @@ tibble = read_tsv("/path/to/file.tsv")
 # The viewer stores your credentials; it is optional, but speeds things up.
 viewer = newAtlasViewer()
 
+dataset_name = "my-dataset"
+indexed_field = "full-text"
+
 # The flow for creating a map is building the dataset, adding data, and then requesting the creation of a map.
-create_dataset(name, viewer = viewer) |>
+create_dataset(dataset_name, viewer = viewer) |>
   add_dataframe(tibble, viewer = viewer) |>
-  build_map(indexed_field = "title", colnames = colnames(tibble), viewer=viewer)
+  build_map(indexed_field = indexed_field, colnames = colnames(tibble), viewer=viewer)
 ```
+
+Go to atlas.nomic.ai and visit your organization.
