@@ -156,7 +156,7 @@ newAtlasViewer <- function(use_env_token = TRUE, apiKey = NULL, apiLocation = NU
 #' @export
 #'
 #' @examples
-create_dataset = function(dataset_name, viewer=NULL) {
+create_dataset = function(dataset_name, public=FALSE, viewer=NULL) {
   # Deprecated concept, still necessary for a short period
   unique_id_field = "row_number"
   # Deprecated concept, still necessary for a short period
@@ -164,7 +164,12 @@ create_dataset = function(dataset_name, viewer=NULL) {
   message("Creating project")
   if (is.null(viewer)) viewer = newAtlasViewer();
   org_id = viewer$apiCall("/v1/user")$organizations[[1]]$organization_id
-  options = list(organization_id = org_id, unique_id_field = unique_id_field, project_name = dataset_name)
+  options = list(
+    organization_id = org_id,
+    unique_id_field = unique_id_field,
+    project_name = dataset_name,
+    is_public = public
+  )
   options[['modality']] = modality
   data = viewer$apiCall("/v1/project/create", 'POST', options)
   data
