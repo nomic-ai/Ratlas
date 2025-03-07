@@ -177,22 +177,30 @@ create_dataset = function(dataset_name, public=FALSE, viewer=NULL) {
 
 add_dataframe = function(project_response, dataframe, viewer=NULL) {
   if (is.null(viewer)) viewer = newAtlasViewer()
+
   table = dataframe |>
     mutate(row_number = 1:n() |> as.character()) |>
+    mutate(`_group` = floor(as.numeric(row_number) / 10000)) |>
     mutate(across(where(~lubridate::is.Date(.x)), ~as.POSIXct(.x))) |>
-    mutate(across(where(~is.logical(.x)), ~as.character(.x))) |>
-    as_arrow_table()
+    mutate(across(where(~is.logical(.x)), ~as.character(.x)))
 
-  # Add metadata
-  table = table$cast(
-    table$schema$WithMetadata(list(project_id=project_response$project_id, on_id_conflict_ignore = "true"))
-  )
-  message("Uploading data")
-  viewer$apiCall(
-    '/v1/project/data/add/arrow',
-    'POST',
-    payload=table
-  )
+
+  chunks = table |> group_by(`_group`) |> group_split()
+  lapply(chunks, function(table) {
+    # Add metadata
+    table = table |> select(-`_group`)  |>
+      as_arrow_table()
+
+    table = table$cast(
+      table$schema$WithMetadata(list(project_id=project_response$project_id, on_id_conflict_ignore = "true"))
+    )
+    message("uploading rows ", table$row_number[1], '-', table$row_number[nrow(table)])
+    viewer$apiCall(
+      '/v1/project/data/add/arrow',
+      'POST',
+      payload=table
+    )
+  })
   project_response
 }
 
