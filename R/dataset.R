@@ -161,7 +161,6 @@ create_dataset = function(dataset_name, public=FALSE, viewer=NULL) {
   unique_id_field = "row_number"
   # Deprecated concept, still necessary for a short period
   modality='text'
-  message("Creating project")
   if (is.null(viewer)) viewer = newAtlasViewer();
   org_id = viewer$apiCall("/v1/user")$organizations[[1]]$organization_id
   options = list(
@@ -170,24 +169,25 @@ create_dataset = function(dataset_name, public=FALSE, viewer=NULL) {
     project_name = dataset_name,
     is_public = public
   )
+  message("Creating project")
   options[['modality']] = modality
   data = viewer$apiCall("/v1/project/create", 'POST', options)
   data
 }
 
 add_dataframe = function(project_response, dataframe, viewer=NULL) {
-  message("Adding data")
-
   if (is.null(viewer)) viewer = newAtlasViewer()
   table = dataframe |>
     mutate(row_number = 1:n() |> as.character()) |>
     mutate(across(where(~lubridate::is.Date(.x)), ~as.POSIXct(.x))) |>
     mutate(across(where(~is.logical(.x)), ~as.character(.x))) |>
     as_arrow_table()
+
   # Add metadata
   table = table$cast(
     table$schema$WithMetadata(list(project_id=project_response$project_id, on_id_conflict_ignore = "true"))
   )
+  message("Uploading data")
   viewer$apiCall(
     '/v1/project/data/add/arrow',
     'POST',
@@ -197,7 +197,6 @@ add_dataframe = function(project_response, dataframe, viewer=NULL) {
 }
 
 build_map = function(project_response, indexed_field, colnames, viewer=NULL) {
-  message("Building map")
   response <- viewer$apiCall(
     '/v1/project/index/create',
     'POST',
