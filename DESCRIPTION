@@ -1,0 +1,17 @@
+Package: Ratlas
+Type: Package
+Title: Nomic Atlas R Client
+Version: 0.1.0
+Author: Ben Schmidt
+Maintainer: Ben Schmidt <ben@nomic.ai>
+Description: Upload dataframes to nomic atlas
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    httr,
+    jsonlite,
+    arrow,
+    readr,
+    dplyr
